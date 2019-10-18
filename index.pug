@@ -1,0 +1,167 @@
+- var link = 'letswrite-postmessage'
+- var title = 'postMessage 主頁、iframe頁可互相傳值'
+- var description = '文章大綱'
+
+<!DOCTYPE html>
+html(lang="zh-TW")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="X-UA-Compatible", content="ie=edge")
+    title #{title} - Augustus - Let's Write
+
+    link(rel="canonical", href=`https://auguston.github.io/${link}/`)
+    meta(property="og:url", content=`https://auguston.github.io/${link}/`)
+
+    meta(property="fb:app_id", content="2435108729902508")
+    meta(property="og:type", content="website")
+
+    meta(property="og:site_name", content="Let's Write")
+    meta(property="og:title", content=`${title} - Augustus - Let's Write`)
+    meta(itemprop="name", content=`${title} - Augustus - Let's Write`)
+
+    meta(name="description", content=description)
+    meta(property="og:description", content=description)
+    meta(itemprop="description", content=description)
+
+    meta(itemprop="image", content=`https://auguston.github.io/${link}/fb.jpg`)
+    meta(property="og:image", content=`https://auguston.github.io/${link}/fb.jpg`)
+    meta(property="og:image:width", content="1200")
+    meta(property="og:image:height", content="630")
+    meta(property="og:image:alt", content=title)
+
+    link(rel="shortcut icon", href="https://i0.wp.com/letswrite.tw/wp-content/uploads/2019/07/cropped-letswrite512-1.jpg")
+
+    //- css
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css")
+    link(rel="stylesheet", href="dist/style.min.css")
+
+    //- 頁面用的 style，可刪
+    style.
+      body {
+        background: #F5F5F5;
+      }
+
+    // Google Tag Manager
+    script.
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-PGQ9WQT');
+  body
+
+    // Google Tag Manager (noscript)
+    noscript
+      iframe(src="https://www.googletagmanager.com/ns.html?id=GTM-PGQ9WQT", height="0", width="0", style="display:none;visibility:hidden")
+    
+    .container
+
+      .row
+
+        .twelve.columns.text-center
+
+          h1 postMessage 傳遞參數
+          h6 筆記文：Let's Write
+      
+      hr
+      
+      .row
+        .twelve.columns
+          h2 範例1：iframe頁傳訊息給母頁
+          p 子頁（iframe.tw）要傳自己的高度給母頁（mother.tw）
+
+        .twelve.columns
+          h5 iframe.com.tw 傳訊息
+          pre
+            code
+              | /* iframe 的 parent 就是包它的頁面 */
+              | window.addEventListener('load', () => {
+              |   const height = document.body.offsetHeight;
+              |   parent.postMessage(height, 'https://mother.tw'); // https://mother.tw 就是母頁的網域
+              | });
+          
+        .twelve.columns
+          h5 mother.com.tw 接訊息
+          pre
+            code
+              | &lt;iframe id="iframe" src="iframe/index.html">&lt;/iframe>
+              | 
+              | &lt;script>
+              |   // 接到 message 要做什麼事的 function
+              |   function receiveMessage(e) {
+              |     // 來源網址（e.origin）不是指定的網域時
+              |     if(e.origin !== 'https://iframe.tw') {
+              |       alert('資料來源錯誤');
+              |       return false;
+              |     }
+              |     // 來源網址是指定的網域時
+              |     else {
+              |       // 拿傳來的參數（e.data）
+              |       const height = e.data;
+              |       document.getElementById('iframe').setAttribute('height', height); // 改變iframe tag height
+              |     }
+              |   }
+              | 
+              |   // 監聽 message 事件
+              |   window.addEventListener('message', receiveMessage, false);
+              | &lt;/script>
+        
+        .twelve.columns
+          h5 呈現結果：iframe的高度就是iframe頁面本身的高度，無縫iframe
+          iframe#iframe(src="iframe/index.html", frameborder="0")
+      
+      hr
+      
+      .row
+        .twelve.columns
+          h2 範例2：母頁傳訊息給iframe頁
+          p 母頁（mother.tw）傳訊息給子頁（iframe.tw），讓子頁內容變色。
+        
+        .twelve.columns
+          h5 mother.com.tw 按鈕click時傳訊息
+          pre
+            code
+              | // 抓到iframe的視窗
+              | const iframe = document.getElementById('iframe2').contentWindow;
+              | 
+              | // 按鈕click時傳訊息
+              | document.getElementById('blue').addEventListener('click', () => {
+              |   iframe.postMessage('lightskyblue', 'https://iframe.tw');
+              | });
+        
+        .twelve.columns
+          h5 iframe.com.tw 接到訊息時改變顏色
+          pre
+            code
+              | // 接到 message 要做什麼事的 function
+              | function receiveMessage(e) {
+              |   // 來源網址（e.origin）不是指定的網域時
+              |   if(e.origin !== 'https://mother.tw') {
+              |     alert('資料來源錯誤');
+              |     return false;
+              |   }
+              |   // 來源網址是指定的網域時
+              |   else {
+              |     // 拿傳來的參數（e.data）
+              |     const bgColor = e.data;
+              |     document.querySelector('.box').setAttribute('style', 'background: ' + bgColor);
+              |   }
+              | }
+              | 
+              | // 監聽 message 事件
+              | window.addEventListener('message', receiveMessage, false);
+        
+        .twelve.columns
+          h5 呈現結果：點以下按鈕，iframe中的box會變色
+          p 為了認知是iframe，把iframe border給留著。
+          
+          div
+            button#blue(type="button") 藍色
+            button#gold(type="button") 金色
+            button#green(type="button") 綠色
+          
+          iframe#iframe2(src="iframe/index2.html", height="300")
+        
+
+    script(src="dist/main.min.js")

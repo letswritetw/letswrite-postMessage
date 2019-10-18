@@ -1,0 +1,27 @@
+*, *::before, *::after {
+  box-sizing: border-box; }
+
+.text-center {
+  text-align: center; }
+
+.container {
+  padding-top: 5vh;
+  padding-bottom: 32px; }
+
+pre > code {
+  overflow-x: auto; }
+
+iframe {
+  width: 100%; }
+
+button {
+  border-color: rgba(0, 0, 0, 0.1); }
+
+#blue {
+  background-color: lightskyblue; }
+
+#green {
+  background-color: lightgreen; }
+
+#gold {
+  background-color: gold; }

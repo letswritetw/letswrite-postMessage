@@ -1,111 +1,146 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>window postmessage example iframe</title>
-  <!-- common.css -->
-  <style>* {-webkit-tap-highlight-color: rgba(0,0,0,0);}html {-webkit-text-size-adjust: none;}body {font-family: Arial, Helvetica, sans-serif;margin: 0;color: #333;word-wrap: break-word; background-color: #ECEFF1;}h1, h2, h3, h4, h5, h6 {line-height: 1.1;}img {max-width: 100% !important;}blockquote {margin: 0;padding: 0 15px;color: #777;border-left: 4px solid #ddd;}hr {background-color: #ddd;border: 0;height: 1px;margin: 15px 0;}code {font-family: Menlo, Consolas, 'Ubuntu Mono', Monaco, 'source-code-pro', monospace;line-height: 1.4;margin: 0;padding: 0.2em 0;font-size: 85%;background-color: rgba(0,0,0,0.04);border-radius: 3px;}pre > code {margin: 0;padding: 0;font-size: 100%;word-break: normal;background: transparent;border: 0;}ol {list-style-type: decimal;}ol ol, ul ol {list-style-type: lower-latin;}ol ol ol, ul ol ol, ul ul ol, ol ul ol {list-style-type: lower-roman;}table {border-spacing: 0;border-collapse: collapse;margin-top: 0;margin-bottom: 16px;}table th {font-weight: bold;}table th, table td {padding: 6px 13px;border: 1px solid #ddd;}table tr {border-top: 1px solid #ccc;}table tr:nth-child(even) {background-color: #f8f8f8;}input[type="checkbox"] {cursor: default;margin-right: 0.5em;font-size: 13px;}.task-list-item {list-style-type: none;}.task-list-item+.task-list-item {margin-top: 3px;}.task-list-item input {float: left;margin: 0.3em 1em 0.25em -1.6em;vertical-align: middle;}#tag-field {margin: 8px 2px 10px;}#tag-field .tag {display: inline-block;background: #cadff3;border-radius: 4px;padding: 1px 8px;color: black;font-size: 12px;margin-right: 10px;line-height: 1.4;}</style>
-  <!-- ace-static.css -->
-  <style>.ace_static_highlight {white-space: pre-wrap;}.ace_static_highlight .ace_gutter {width: 2em;text-align: right;padding: 0 3px 0 0;margin-right: 3px;}.ace_static_highlight.ace_show_gutter > .ace_line {padding-left: 2.6em;}.ace_static_highlight .ace_line {position: relative;}.ace_static_highlight .ace_gutter-cell {-moz-user-select: -moz-none;-khtml-user-select: none;-webkit-user-select: none;user-select: none;top: 0;bottom: 0;left: 0;position: absolute;}.ace_static_highlight .ace_gutter-cell:before {content: counter(ace_line, decimal);counter-increment: ace_line;}.ace_static_highlight {counter-reset: ace_line;}</style>
-  <style>.ace-monokai .ace_gutter {background: #2F3129;color: #8F908A}.ace-monokai .ace_print-margin {width: 1px;background: #555651}.ace-monokai {background-color: #272822;color: #F8F8F2}.ace-monokai .ace_cursor {color: #F8F8F0}.ace-monokai .ace_marker-layer .ace_selection {background: #49483E}.ace-monokai.ace_multiselect .ace_selection.ace_start {box-shadow: 0 0 3px 0px #272822;}.ace-monokai .ace_marker-layer .ace_step {background: rgb(102, 82, 0)}.ace-monokai .ace_marker-layer .ace_bracket {margin: -1px 0 0 -1px;border: 1px solid #49483E}.ace-monokai .ace_marker-layer .ace_active-line {background: #202020}.ace-monokai .ace_gutter-active-line {background-color: #272727}.ace-monokai .ace_marker-layer .ace_selected-word {border: 1px solid #49483E}.ace-monokai .ace_invisible {color: #52524d}.ace-monokai .ace_entity.ace_name.ace_tag,.ace-monokai .ace_keyword,.ace-monokai .ace_meta.ace_tag,.ace-monokai .ace_storage {color: #F92672}.ace-monokai .ace_punctuation,.ace-monokai .ace_punctuation.ace_tag {color: #fff}.ace-monokai .ace_constant.ace_character,.ace-monokai .ace_constant.ace_language,.ace-monokai .ace_constant.ace_numeric,.ace-monokai .ace_constant.ace_other {color: #AE81FF}.ace-monokai .ace_invalid {color: #F8F8F0;background-color: #F92672}.ace-monokai .ace_invalid.ace_deprecated {color: #F8F8F0;background-color: #AE81FF}.ace-monokai .ace_support.ace_constant,.ace-monokai .ace_support.ace_function {color: #66D9EF}.ace-monokai .ace_fold {background-color: #A6E22E;border-color: #F8F8F2}.ace-monokai .ace_storage.ace_type,.ace-monokai .ace_support.ace_class,.ace-monokai .ace_support.ace_type {font-style: italic;color: #66D9EF}.ace-monokai .ace_entity.ace_name.ace_function,.ace-monokai .ace_entity.ace_other,.ace-monokai .ace_entity.ace_other.ace_attribute-name,.ace-monokai .ace_variable {color: #A6E22E}.ace-monokai .ace_variable.ace_parameter {font-style: italic;color: #FD971F}.ace-monokai .ace_string {color: #E6DB74}.ace-monokai .ace_comment {color: #75715E}.ace-monokai .ace_indent-guide {background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAEklEQVQImWPQ0FD0ZXBzd/wPAAjVAoxeSgNeAAAAAElFTkSuQmCC) right repeat-y}</style>
-  <!-- export.css -->
-  <style>
-    body{margin:0 auto;max-width:800px;line-height:1.4}
-    #nav{margin:5px 0 10px;font-size:15px}
-    #titlearea{border-bottom:1px solid #ccc;font-size:17px;padding:10px 0;}
-    #contentarea{font-size:15px;margin:16px 0}
-    .cell{outline:0;min-height:20px;margin:5px 0;padding:5px 0;}
-    .code-cell{font-family:Menlo,Consolas,'Ubuntu Mono',Monaco,'source-code-pro',monospace;font-size:12px;}
-    .latex-cell{white-space:pre-wrap;}
-  </style>
-  <!-- User CSS -->
-  <style> .text-cell {font-size: 15px;}.code-cell {font-size: 12px;}.markdown-cell {font-size: 15px;}.latex-cell {font-size: 15px;}</style>
-</head>
-<body>
-
-  <div id="titlearea">
-    <h2>window postmessage example iframe</h2>
-  </div>
-  <div id="contentarea"><div class="cell markdown-cell"><h1 id="iframe-child-send-message-to-parent">iframe(child) send message to parent</h1>
-</div><div class="cell markdown-cell"><h2 id="iframe-html">iframe.html</h2>
-</div><div class="cell code-cell"><div class="ace-monokai"><div class="ace_static_highlight ace_show_gutter" style="counter-reset:ace_line 0"><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_comment ace_xml">&lt;!-- some html code... --&gt;</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_comment ace_xml">&lt;!-- some html code... --&gt;</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_comment ace_xml">&lt;!-- some html code... --&gt;</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_meta ace_tag ace_punctuation ace_tag-open ace_xml">&lt;</span><span class="ace_meta ace_tag ace_script ace_tag-name ace_xml">script</span><span class="ace_meta ace_tag ace_punctuation ace_tag-close ace_xml">&gt;</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span>    <span class="ace_identifier">$</span><span class="ace_paren ace_lparen">(</span><span class="ace_variable ace_language">window</span><span class="ace_paren ace_rparen">)</span><span class="ace_punctuation ace_operator">.</span><span class="ace_identifier">on</span><span class="ace_paren ace_lparen">(</span><span class="ace_string">'load'</span><span class="ace_punctuation ace_operator">,</span> <span class="ace_storage ace_type">function</span><span class="ace_paren ace_lparen">(</span><span class="ace_paren ace_rparen">)</span> <span class="ace_paren ace_lparen">{</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span>    <span class="ace_comment">/*</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span><span class="ace_comment">    XX.postMessate('something msg', 'http://...');</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span><span class="ace_comment">    XX ==&gt; <span class="ace_cjk" style="width:NaNpx">要</span><span class="ace_cjk" style="width:NaNpx">收</span><span class="ace_cjk" style="width:NaNpx">到</span><span class="ace_cjk" style="width:NaNpx">訊</span><span class="ace_cjk" style="width:NaNpx">息</span><span class="ace_cjk" style="width:NaNpx">的</span><span class="ace_cjk" style="width:NaNpx">對</span><span class="ace_cjk" style="width:NaNpx">象</span><span class="ace_cjk" style="width:NaNpx">，</span>'parent'<span class="ace_cjk" style="width:NaNpx">就</span><span class="ace_cjk" style="width:NaNpx">是</span> iframe <span class="ace_cjk" style="width:NaNpx">的</span> parent<span class="ace_cjk" style="width:NaNpx">。</span></span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span><span class="ace_comment">    'something msg' ==&gt; <span class="ace_cjk" style="width:NaNpx">要</span><span class="ace_cjk" style="width:NaNpx">送</span><span class="ace_cjk" style="width:NaNpx">出</span><span class="ace_cjk" style="width:NaNpx">的</span><span class="ace_cjk" style="width:NaNpx">訊</span><span class="ace_cjk" style="width:NaNpx">息</span></span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span><span class="ace_comment">    'http://...' ==&gt; XX <span class="ace_cjk" style="width:NaNpx">的</span><span class="ace_cjk" style="width:NaNpx">網</span><span class="ace_cjk" style="width:NaNpx">址</span></span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_comment">    */</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span>    <span class="ace_identifier">parent</span><span class="ace_punctuation ace_operator">.</span><span class="ace_identifier">postMessage</span><span class="ace_paren ace_lparen">(</span><span class="ace_string">'msg'</span><span class="ace_punctuation ace_operator">,</span> <span class="ace_string">'http://mother.html'</span><span class="ace_paren ace_rparen">)</span><span class="ace_punctuation ace_operator">;</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_paren ace_rparen">})</span><span class="ace_punctuation ace_operator">;</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_meta ace_tag ace_punctuation ace_end-tag-open ace_xml">&lt;/</span><span class="ace_meta ace_tag ace_script ace_tag-name ace_xml">script</span><span class="ace_meta ace_tag ace_punctuation ace_tag-close ace_xml">&gt;</span>
-</div></div></div></div><div class="cell markdown-cell"><h2 id="mother-html">mother.html</h2>
-</div><div class="cell code-cell"><div class="ace-monokai"><div class="ace_static_highlight ace_show_gutter" style="counter-reset:ace_line 0"><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_meta ace_tag ace_punctuation ace_tag-open ace_xml">&lt;</span><span class="ace_meta ace_tag ace_tag-name ace_xml">iframe</span><span class="ace_text ace_tag-whitespace ace_xml"> </span><span class="ace_entity ace_other ace_attribute-name ace_xml">src</span><span class="ace_keyword ace_operator ace_attribute-equals ace_xml">=</span><span class="ace_string ace_attribute-value ace_xml">"http://iframe.html"</span><span class="ace_meta ace_tag ace_punctuation ace_tag-close ace_xml">&gt;</span><span class="ace_meta ace_tag ace_punctuation ace_end-tag-open ace_xml">&lt;/</span><span class="ace_meta ace_tag ace_tag-name ace_xml">iframe</span><span class="ace_meta ace_tag ace_punctuation ace_tag-close ace_xml">&gt;</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_meta ace_tag ace_punctuation ace_tag-open ace_xml">&lt;</span><span class="ace_meta ace_tag ace_script ace_tag-name ace_xml">script</span><span class="ace_meta ace_tag ace_punctuation ace_tag-close ace_xml">&gt;</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span>    <span class="ace_comment">// <span class="ace_cjk" style="width:NaNpx">這</span><span class="ace_cjk" style="width:NaNpx">邊</span><span class="ace_cjk" style="width:NaNpx">要</span><span class="ace_cjk" style="width:NaNpx">使</span><span class="ace_cjk" style="width:NaNpx">用</span><span class="ace_cjk" style="width:NaNpx">的</span><span class="ace_cjk" style="width:NaNpx">是</span> iframe onload<span class="ace_cjk" style="width:NaNpx">，</span><span class="ace_cjk" style="width:NaNpx">用</span> window onload<span class="ace_cjk" style="width:NaNpx">會</span><span class="ace_cjk" style="width:NaNpx">造</span><span class="ace_cjk" style="width:NaNpx">成</span><span class="ace_cjk" style="width:NaNpx">錯</span><span class="ace_cjk" style="width:NaNpx">誤</span><span class="ace_cjk" style="width:NaNpx">，</span><span class="ace_cjk" style="width:NaNpx">因</span><span class="ace_cjk" style="width:NaNpx">為</span>iframe<span class="ace_cjk" style="width:NaNpx">有</span><span class="ace_cjk" style="width:NaNpx">可</span><span class="ace_cjk" style="width:NaNpx">能</span><span class="ace_cjk" style="width:NaNpx">未</span><span class="ace_cjk" style="width:NaNpx">讀</span><span class="ace_cjk" style="width:NaNpx">取</span><span class="ace_cjk" style="width:NaNpx">完</span></span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span>    <span class="ace_identifier">$</span><span class="ace_paren ace_lparen">(</span><span class="ace_string">'iframe'</span><span class="ace_paren ace_rparen">)</span><span class="ace_punctuation ace_operator">.</span><span class="ace_identifier">on</span><span class="ace_paren ace_lparen">(</span><span class="ace_string">'load'</span><span class="ace_punctuation ace_operator">,</span> <span class="ace_storage ace_type">function</span><span class="ace_paren ace_lparen">(</span><span class="ace_paren ace_rparen">)</span> <span class="ace_paren ace_lparen">{</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span>    <span class="ace_comment">// <span class="ace_cjk" style="width:NaNpx">收</span><span class="ace_cjk" style="width:NaNpx">到</span>message<span class="ace_cjk" style="width:NaNpx">時</span><span class="ace_cjk" style="width:NaNpx">要</span><span class="ace_cjk" style="width:NaNpx">執</span><span class="ace_cjk" style="width:NaNpx">行</span><span class="ace_cjk" style="width:NaNpx">的</span>function</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span>    <span class="ace_storage ace_type">function</span> <span class="ace_entity ace_name ace_function">receiveMessage</span><span class="ace_paren ace_lparen">(</span><span class="ace_variable ace_parameter">e</span><span class="ace_paren ace_rparen">)</span> <span class="ace_paren ace_lparen">{</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span><span class="ace_indent-guide">    </span>    <span class="ace_comment">// <span class="ace_cjk" style="width:NaNpx">檢</span><span class="ace_cjk" style="width:NaNpx">查</span><span class="ace_cjk" style="width:NaNpx">來</span><span class="ace_cjk" style="width:NaNpx">源</span><span class="ace_cjk" style="width:NaNpx">網</span><span class="ace_cjk" style="width:NaNpx">址</span><span class="ace_cjk" style="width:NaNpx">是</span><span class="ace_cjk" style="width:NaNpx">否</span><span class="ace_cjk" style="width:NaNpx">正</span><span class="ace_cjk" style="width:NaNpx">確</span></span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span><span class="ace_indent-guide">    </span>    <span class="ace_keyword">if</span> <span class="ace_paren ace_lparen">(</span><span class="ace_identifier">e</span><span class="ace_punctuation ace_operator">.</span><span class="ace_identifier">origin</span> <span class="ace_keyword ace_operator">!==</span> <span class="ace_string">"http://iframe.html"</span><span class="ace_paren ace_rparen">)</span> <span class="ace_paren ace_lparen">{</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span><span class="ace_indent-guide">    </span><span class="ace_indent-guide">    </span>  <span class="ace_support ace_function">alert</span><span class="ace_paren ace_lparen">(</span><span class="ace_string">'<span class="ace_cjk" style="width:NaNpx">資</span><span class="ace_cjk" style="width:NaNpx">料</span><span class="ace_cjk" style="width:NaNpx">來</span><span class="ace_cjk" style="width:NaNpx">源</span><span class="ace_cjk" style="width:NaNpx">錯</span><span class="ace_cjk" style="width:NaNpx">誤</span>'</span><span class="ace_paren ace_rparen">)</span><span class="ace_punctuation ace_operator">;</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span><span class="ace_indent-guide">    </span><span class="ace_indent-guide">    </span>  <span class="ace_keyword">return</span> <span class="ace_constant ace_language ace_boolean">false</span><span class="ace_punctuation ace_operator">;</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span><span class="ace_indent-guide">    </span>    <span class="ace_paren ace_rparen">}</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span><span class="ace_indent-guide">    </span>    <span class="ace_keyword">else</span> <span class="ace_paren ace_lparen">{</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span><span class="ace_indent-guide">    </span><span class="ace_indent-guide">    </span>    <span class="ace_comment">// e.data <span class="ace_cjk" style="width:NaNpx">就</span><span class="ace_cjk" style="width:NaNpx">是</span> iframe <span class="ace_cjk" style="width:NaNpx">中</span><span class="ace_cjk" style="width:NaNpx">的</span> 'something msg'</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span><span class="ace_indent-guide">    </span><span class="ace_indent-guide">    </span>    <span class="ace_storage ace_type">var</span> <span class="ace_identifier">data</span> <span class="ace_keyword ace_operator">=</span> <span class="ace_identifier">e</span><span class="ace_punctuation ace_operator">.</span><span class="ace_identifier">data</span><span class="ace_punctuation ace_operator">;</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span><span class="ace_indent-guide">    </span>    <span class="ace_paren ace_rparen">}</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span>    <span class="ace_paren ace_rparen">}</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span>    <span class="ace_comment">// <span class="ace_cjk" style="width:NaNpx">監</span><span class="ace_cjk" style="width:NaNpx">聽</span> message <span class="ace_cjk" style="width:NaNpx">事</span><span class="ace_cjk" style="width:NaNpx">件</span><span class="ace_cjk" style="width:NaNpx">，</span><span class="ace_cjk" style="width:NaNpx">收</span><span class="ace_cjk" style="width:NaNpx">到</span><span class="ace_cjk" style="width:NaNpx">事</span><span class="ace_cjk" style="width:NaNpx">件</span><span class="ace_cjk" style="width:NaNpx">時</span><span class="ace_cjk" style="width:NaNpx">就</span><span class="ace_cjk" style="width:NaNpx">執</span><span class="ace_cjk" style="width:NaNpx">行</span> receiveMessage <span class="ace_cjk" style="width:NaNpx">這</span><span class="ace_cjk" style="width:NaNpx">個</span>function</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span>    <span class="ace_variable ace_language">window</span><span class="ace_punctuation ace_operator">.</span><span class="ace_identifier">addEventListener</span><span class="ace_paren ace_lparen">(</span><span class="ace_string">'message'</span><span class="ace_punctuation ace_operator">,</span> <span class="ace_identifier">receiveMessage</span><span class="ace_paren ace_rparen">)</span><span class="ace_punctuation ace_operator">;</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span>    <span class="ace_paren ace_rparen">})</span><span class="ace_punctuation ace_operator">;</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_meta ace_tag ace_punctuation ace_end-tag-open ace_xml">&lt;/</span><span class="ace_meta ace_tag ace_script ace_tag-name ace_xml">script</span><span class="ace_meta ace_tag ace_punctuation ace_tag-close ace_xml">&gt;</span>
-</div></div></div></div><div class="cell text-cell"><hr></div><div class="cell markdown-cell"><h1 id="parent-send-message-to-iframe">parent send message to iframe</h1>
-</div><div class="cell markdown-cell"><h2 id="mother-html">mother.html</h2>
-</div><div class="cell code-cell"><div class="ace-monokai"><div class="ace_static_highlight ace_show_gutter" style="counter-reset:ace_line 0"><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_meta ace_tag ace_punctuation ace_tag-open ace_xml">&lt;</span><span class="ace_meta ace_tag ace_tag-name ace_xml">iframe</span><span class="ace_text ace_tag-whitespace ace_xml"> </span><span class="ace_entity ace_other ace_attribute-name ace_xml">id</span><span class="ace_keyword ace_operator ace_attribute-equals ace_xml">=</span><span class="ace_string ace_attribute-value ace_xml">"myIframe"</span><span class="ace_text ace_tag-whitespace ace_xml"> </span><span class="ace_entity ace_other ace_attribute-name ace_xml">src</span><span class="ace_keyword ace_operator ace_attribute-equals ace_xml">=</span><span class="ace_string ace_attribute-value ace_xml">"http://iframe.html"</span><span class="ace_meta ace_tag ace_punctuation ace_tag-close ace_xml">&gt;</span><span class="ace_meta ace_tag ace_punctuation ace_end-tag-open ace_xml">&lt;/</span><span class="ace_meta ace_tag ace_tag-name ace_xml">iframe</span><span class="ace_meta ace_tag ace_punctuation ace_tag-close ace_xml">&gt;</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_meta ace_tag ace_punctuation ace_tag-open ace_xml">&lt;</span><span class="ace_meta ace_tag ace_script ace_tag-name ace_xml">script</span><span class="ace_meta ace_tag ace_punctuation ace_tag-close ace_xml">&gt;</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span>    <span class="ace_identifier">$</span><span class="ace_paren ace_lparen">(</span><span class="ace_string">'iframe'</span><span class="ace_paren ace_rparen">)</span><span class="ace_punctuation ace_operator">.</span><span class="ace_identifier">on</span><span class="ace_paren ace_lparen">(</span><span class="ace_string">'load'</span><span class="ace_punctuation ace_operator">,</span> <span class="ace_storage ace_type">function</span><span class="ace_paren ace_lparen">(</span><span class="ace_paren ace_rparen">)</span> <span class="ace_paren ace_lparen">{</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span>    <span class="ace_comment">// <span class="ace_cjk" style="width:NaNpx">跟</span> # iframe(child) send message to parent <span class="ace_cjk" style="width:NaNpx">的</span><span class="ace_cjk" style="width:NaNpx">說</span><span class="ace_cjk" style="width:NaNpx">明</span><span class="ace_cjk" style="width:NaNpx">一</span><span class="ace_cjk" style="width:NaNpx">樣</span><span class="ace_cjk" style="width:NaNpx">，</span><span class="ace_cjk" style="width:NaNpx">只</span><span class="ace_cjk" style="width:NaNpx">是</span> XX <span class="ace_cjk" style="width:NaNpx">要</span><span class="ace_cjk" style="width:NaNpx">從</span> parent <span class="ace_cjk" style="width:NaNpx">改</span><span class="ace_cjk" style="width:NaNpx">為</span><span class="ace_cjk" style="width:NaNpx">以</span><span class="ace_cjk" style="width:NaNpx">下</span><span class="ace_cjk" style="width:NaNpx">變</span><span class="ace_cjk" style="width:NaNpx">數</span></span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span>    <span class="ace_storage ace_type">var</span> <span class="ace_identifier">iframe</span> <span class="ace_keyword ace_operator">=</span> <span class="ace_variable ace_language">document</span><span class="ace_punctuation ace_operator">.</span><span class="ace_support ace_function ace_dom">getElementById</span><span class="ace_paren ace_lparen">(</span><span class="ace_string">'myIframe'</span><span class="ace_paren ace_rparen">)</span><span class="ace_punctuation ace_operator">.</span><span class="ace_identifier">contentWindow</span><span class="ace_punctuation ace_operator">;</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span>    <span class="ace_identifier">ifrmae</span><span class="ace_punctuation ace_operator">.</span><span class="ace_identifier">postMessage</span><span class="ace_paren ace_lparen">(</span><span class="ace_string">'msg'</span><span class="ace_punctuation ace_operator">,</span> <span class="ace_string">'http://iframe.html'</span><span class="ace_paren ace_rparen">)</span><span class="ace_punctuation ace_operator">;</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_paren ace_rparen">})</span><span class="ace_punctuation ace_operator">;</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_meta ace_tag ace_punctuation ace_end-tag-open ace_xml">&lt;/</span><span class="ace_meta ace_tag ace_script ace_tag-name ace_xml">script</span><span class="ace_meta ace_tag ace_punctuation ace_tag-close ace_xml">&gt;</span>
-</div></div></div></div><div class="cell markdown-cell"><h2 id="iframe-html">iframe.html</h2>
-</div><div class="cell code-cell"><div class="ace-monokai"><div class="ace_static_highlight ace_show_gutter" style="counter-reset:ace_line 0"><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_comment ace_xml">&lt;!-- some html code... --&gt;</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_comment ace_xml">&lt;!-- some html code... --&gt;</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_comment ace_xml">&lt;!-- some html code... --&gt;</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_meta ace_tag ace_punctuation ace_tag-open ace_xml">&lt;</span><span class="ace_meta ace_tag ace_script ace_tag-name ace_xml">script</span><span class="ace_meta ace_tag ace_punctuation ace_tag-close ace_xml">&gt;</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span>    <span class="ace_identifier">$</span><span class="ace_paren ace_lparen">(</span><span class="ace_variable ace_language">window</span><span class="ace_paren ace_rparen">)</span><span class="ace_punctuation ace_operator">.</span><span class="ace_identifier">on</span><span class="ace_paren ace_lparen">(</span><span class="ace_string">'load'</span><span class="ace_punctuation ace_operator">,</span> <span class="ace_storage ace_type">function</span><span class="ace_paren ace_lparen">(</span><span class="ace_paren ace_rparen">)</span> <span class="ace_paren ace_lparen">{</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span>    <span class="ace_comment">// <span class="ace_cjk" style="width:NaNpx">收</span><span class="ace_cjk" style="width:NaNpx">到</span>message<span class="ace_cjk" style="width:NaNpx">時</span><span class="ace_cjk" style="width:NaNpx">要</span><span class="ace_cjk" style="width:NaNpx">執</span><span class="ace_cjk" style="width:NaNpx">行</span><span class="ace_cjk" style="width:NaNpx">的</span>function</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span>    <span class="ace_storage ace_type">function</span> <span class="ace_entity ace_name ace_function">receiveMessage</span><span class="ace_paren ace_lparen">(</span><span class="ace_variable ace_parameter">e</span><span class="ace_paren ace_rparen">)</span> <span class="ace_paren ace_lparen">{</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span><span class="ace_indent-guide">    </span>    <span class="ace_comment">// <span class="ace_cjk" style="width:NaNpx">檢</span><span class="ace_cjk" style="width:NaNpx">查</span><span class="ace_cjk" style="width:NaNpx">來</span><span class="ace_cjk" style="width:NaNpx">源</span><span class="ace_cjk" style="width:NaNpx">網</span><span class="ace_cjk" style="width:NaNpx">址</span><span class="ace_cjk" style="width:NaNpx">是</span><span class="ace_cjk" style="width:NaNpx">否</span><span class="ace_cjk" style="width:NaNpx">正</span><span class="ace_cjk" style="width:NaNpx">確</span></span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span><span class="ace_indent-guide">    </span>    <span class="ace_keyword">if</span> <span class="ace_paren ace_lparen">(</span><span class="ace_identifier">e</span><span class="ace_punctuation ace_operator">.</span><span class="ace_identifier">origin</span> <span class="ace_keyword ace_operator">!==</span> <span class="ace_string">"http://mother.html"</span><span class="ace_paren ace_rparen">)</span> <span class="ace_paren ace_lparen">{</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span><span class="ace_indent-guide">    </span><span class="ace_indent-guide">    </span>  <span class="ace_support ace_function">alert</span><span class="ace_paren ace_lparen">(</span><span class="ace_string">'<span class="ace_cjk" style="width:NaNpx">資</span><span class="ace_cjk" style="width:NaNpx">料</span><span class="ace_cjk" style="width:NaNpx">來</span><span class="ace_cjk" style="width:NaNpx">源</span><span class="ace_cjk" style="width:NaNpx">錯</span><span class="ace_cjk" style="width:NaNpx">誤</span>'</span><span class="ace_paren ace_rparen">)</span><span class="ace_punctuation ace_operator">;</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span><span class="ace_indent-guide">    </span><span class="ace_indent-guide">    </span>  <span class="ace_keyword">return</span> <span class="ace_constant ace_language ace_boolean">false</span><span class="ace_punctuation ace_operator">;</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span><span class="ace_indent-guide">    </span>    <span class="ace_paren ace_rparen">}</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span><span class="ace_indent-guide">    </span>    <span class="ace_keyword">else</span> <span class="ace_paren ace_lparen">{</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span><span class="ace_indent-guide">    </span><span class="ace_indent-guide">    </span>    <span class="ace_comment">// e.data <span class="ace_cjk" style="width:NaNpx">就</span><span class="ace_cjk" style="width:NaNpx">是</span> iframe <span class="ace_cjk" style="width:NaNpx">中</span><span class="ace_cjk" style="width:NaNpx">的</span> 'msg'</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span><span class="ace_indent-guide">    </span><span class="ace_indent-guide">    </span>    <span class="ace_storage ace_type">var</span> <span class="ace_identifier">data</span> <span class="ace_keyword ace_operator">=</span> <span class="ace_identifier">e</span><span class="ace_punctuation ace_operator">.</span><span class="ace_identifier">data</span><span class="ace_punctuation ace_operator">;</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span><span class="ace_indent-guide">    </span>    <span class="ace_paren ace_rparen">}</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span>    <span class="ace_paren ace_rparen">}</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span>    <span class="ace_comment">// <span class="ace_cjk" style="width:NaNpx">監</span><span class="ace_cjk" style="width:NaNpx">聽</span> message <span class="ace_cjk" style="width:NaNpx">事</span><span class="ace_cjk" style="width:NaNpx">件</span><span class="ace_cjk" style="width:NaNpx">，</span><span class="ace_cjk" style="width:NaNpx">收</span><span class="ace_cjk" style="width:NaNpx">到</span><span class="ace_cjk" style="width:NaNpx">事</span><span class="ace_cjk" style="width:NaNpx">件</span><span class="ace_cjk" style="width:NaNpx">時</span><span class="ace_cjk" style="width:NaNpx">就</span><span class="ace_cjk" style="width:NaNpx">執</span><span class="ace_cjk" style="width:NaNpx">行</span> receiveMessage <span class="ace_cjk" style="width:NaNpx">這</span><span class="ace_cjk" style="width:NaNpx">個</span>function</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_indent-guide">    </span>    <span class="ace_variable ace_language">window</span><span class="ace_punctuation ace_operator">.</span><span class="ace_identifier">addEventListener</span><span class="ace_paren ace_lparen">(</span><span class="ace_string">'message'</span><span class="ace_punctuation ace_operator">,</span> <span class="ace_identifier">receiveMessage</span><span class="ace_paren ace_rparen">)</span><span class="ace_punctuation ace_operator">;</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span>    <span class="ace_paren ace_rparen">})</span><span class="ace_punctuation ace_operator">;</span>
-</div><div class="ace_line"><span class="ace_gutter ace_gutter-cell" unselectable="on"></span><span class="ace_meta ace_tag ace_punctuation ace_end-tag-open ace_xml">&lt;/</span><span class="ace_meta ace_tag ace_script ace_tag-name ace_xml">script</span><span class="ace_meta ace_tag ace_punctuation ace_tag-close ace_xml">&gt;</span>
-</div></div></div></div></div>
-  <script></script>
-</body>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>postMessage 主頁、iframe頁可互相傳值 - Augustus - Let's Write</title>
+    <link rel="canonical" href="https://auguston.github.io/letswrite-postmessage/"/>
+    <meta property="og:url" content="https://auguston.github.io/letswrite-postmessage/"/>
+    <meta property="fb:app_id" content="2435108729902508"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:site_name" content="Let's Write"/>
+    <meta property="og:title" content="postMessage 主頁、iframe頁可互相傳值 - Augustus - Let's Write"/>
+    <meta itemprop="name" content="postMessage 主頁、iframe頁可互相傳值 - Augustus - Let's Write"/>
+    <meta name="description" content="文章大綱"/>
+    <meta property="og:description" content="文章大綱"/>
+    <meta itemprop="description" content="文章大綱"/>
+    <meta itemprop="image" content="https://auguston.github.io/letswrite-postmessage/fb.jpg"/>
+    <meta property="og:image" content="https://auguston.github.io/letswrite-postmessage/fb.jpg"/>
+    <meta property="og:image:width" content="1200"/>
+    <meta property="og:image:height" content="630"/>
+    <meta property="og:image:alt" content="postMessage 主頁、iframe頁可互相傳值"/>
+    <link rel="shortcut icon" href="https://i0.wp.com/letswrite.tw/wp-content/uploads/2019/07/cropped-letswrite512-1.jpg"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css"/>
+    <link rel="stylesheet" href="dist/style.min.css"/>
+    <style>
+      body {
+        background: #F5F5F5;
+      }
+      
+    </style>
+    <!-- Google Tag Manager-->
+    <script>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-PGQ9WQT');
+    </script>
+  </head>
+  <body>
+    <!-- Google Tag Manager (noscript)-->
+    <noscript>
+      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PGQ9WQT" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <div class="container">
+      <div class="row">
+        <div class="twelve columns text-center">
+          <h1>postMessage 傳遞參數</h1>
+          <h6>筆記文：Let's Write</h6>
+        </div>
+      </div>
+      <hr/>
+      <div class="row">
+        <div class="twelve columns">
+          <h2>範例1：iframe頁傳訊息給母頁</h2>
+          <p>子頁（iframe.tw）要傳自己的高度給母頁（mother.tw）</p>
+        </div>
+        <div class="twelve columns">
+          <h5>iframe.com.tw 傳訊息</h5>
+          <pre><code>/* iframe 的 parent 就是包它的頁面 */
+window.addEventListener('load', () => {
+  const height = document.body.offsetHeight;
+  parent.postMessage(height, 'https://mother.tw'); // https://mother.tw 就是母頁的網域
+});</code></pre>
+        </div>
+        <div class="twelve columns">
+          <h5>mother.com.tw 接訊息</h5>
+          <pre><code>&lt;iframe id="iframe" src="iframe/index.html">&lt;/iframe>
+ 
+&lt;script>
+  // 接到 message 要做什麼事的 function
+  function receiveMessage(e) {
+    // 來源網址（e.origin）不是指定的網域時
+    if(e.origin !== 'https://iframe.tw') {
+      alert('資料來源錯誤');
+      return false;
+    }
+    // 來源網址是指定的網域時
+    else {
+      // 拿傳來的參數（e.data）
+      const height = e.data;
+      document.getElementById('iframe').setAttribute('height', height); // 改變iframe tag height
+    }
+  }
+ 
+  // 監聽 message 事件
+  window.addEventListener('message', receiveMessage, false);
+&lt;/script></code></pre>
+        </div>
+        <div class="twelve columns">
+          <h5>呈現結果：iframe的高度就是iframe頁面本身的高度，無縫iframe</h5>
+          <iframe id="iframe" src="iframe/index.html" frameborder="0"></iframe>
+        </div>
+      </div>
+      <hr/>
+      <div class="row">
+        <div class="twelve columns">
+          <h2>範例2：母頁傳訊息給iframe頁</h2>
+          <p>母頁（mother.tw）傳訊息給子頁（iframe.tw），讓子頁內容變色。</p>
+        </div>
+        <div class="twelve columns">
+          <h5>mother.com.tw 按鈕click時傳訊息</h5>
+          <pre><code>// 抓到iframe的視窗
+const iframe = document.getElementById('iframe2').contentWindow;
+ 
+// 按鈕click時傳訊息
+document.getElementById('blue').addEventListener('click', () => {
+  iframe.postMessage('lightskyblue', 'https://iframe.tw');
+});</code></pre>
+        </div>
+        <div class="twelve columns">
+          <h5>iframe.com.tw 接到訊息時改變顏色</h5>
+          <pre><code>// 接到 message 要做什麼事的 function
+function receiveMessage(e) {
+  // 來源網址（e.origin）不是指定的網域時
+  if(e.origin !== 'https://mother.tw') {
+    alert('資料來源錯誤');
+    return false;
+  }
+  // 來源網址是指定的網域時
+  else {
+    // 拿傳來的參數（e.data）
+    const bgColor = e.data;
+    document.querySelector('.box').setAttribute('style', 'background: ' + bgColor);
+  }
+}
+ 
+// 監聽 message 事件
+window.addEventListener('message', receiveMessage, false);</code></pre>
+        </div>
+        <div class="twelve columns">
+          <h5>呈現結果：點以下按鈕，iframe中的box會變色</h5>
+          <p>為了認知是iframe，把iframe border給留著。</p>
+          <div>
+            <button id="blue" type="button">藍色</button>
+            <button id="gold" type="button">金色</button>
+            <button id="green" type="button">綠色</button>
+          </div>
+          <iframe id="iframe2" src="iframe/index2.html" height="300"></iframe>
+        </div>
+      </div>
+    </div>
+    <script src="dist/main.min.js"></script>
+  </body>
 </html>

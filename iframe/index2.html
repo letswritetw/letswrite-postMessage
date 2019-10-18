@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .box {
+      width: 200px;
+      height: 200px;
+      background-color: #000;
+    }
+  </style>
+
+</head>
+<body>
+  <div class="container">
+    <div class="box"></div>
+  </div>
+  <script>
+    // 接到 message 要做什麼事的 function
+    function receiveMessage(e) {
+      // 來源網址（e.origin）不是指定的網域時
+      if(e.origin !== 'https://auguston.github.io/') {
+        alert('資料來源錯誤');
+        return false;
+      }
+      // 來源網址是指定的網域時
+      else {
+        // 拿傳來的參數（e.data）
+        const bgColor = e.data;
+        document.querySelector('.box').setAttribute('style', 'background: ' + bgColor);
+      }
+    }
+
+    // 監聽 message 事件
+    window.addEventListener('message', receiveMessage, false);
+  </script>
+
+</body>
+</html>
