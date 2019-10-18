@@ -203,6 +203,14 @@
 		"oAP": "/LICENSE",
 		"oF": 0
 		},
+	"/README.html": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/README.html",
+		"oF": 0
+		},
 	"/README.md": {
 		"cB": 0,
 		"cS": 0,
@@ -253,7 +261,7 @@
 	},
 "projectAttributes": {
 	"creationDate": 593073126.38224399,
-	"displayValue": "letswrite-postmessage",
+	"displayValue": "letswrite-postMessage",
 	"displayValueWasSetByUser": 0,
 	"iconImageName": "brackets_gray",
 	"iconImageWasSetByUser": 0
