@@ -9,6 +9,14 @@
 	],
 "creatorBuild": "31491",
 "files": {
+	"/.gitignore": {
+		"cB": 0,
+		"ft": 8192,
+		"hM": 0,
+		"oA": 0,
+		"oAP": "/.gitignore",
+		"oF": 0
+		},
 	"/dist/main.min.js": {
 		"bF": 0,
 		"ft": 64,
@@ -212,14 +220,6 @@
 		"hM": 0,
 		"oA": 0,
 		"oAP": "/LICENSE",
-		"oF": 0
-		},
-	"/README.html": {
-		"cB": 0,
-		"ft": 8192,
-		"hM": 0,
-		"oA": 0,
-		"oAP": "/README.html",
 		"oF": 0
 		},
 	"/README.md": {
