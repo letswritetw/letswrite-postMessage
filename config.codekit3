@@ -30,6 +30,17 @@
 		"oF": 0,
 		"oS": 3
 		},
+	"/fb.jpg": {
+		"ft": 16384,
+		"iS": 62861,
+		"jF": 0,
+		"oA": 0,
+		"oAP": "/fb.jpg",
+		"oF": 0,
+		"oIPL": 0,
+		"opt": 0,
+		"q": 100
+		},
 	"/iframe/dist/css/style.css": {
 		"aP": 1,
 		"bl": 0,
