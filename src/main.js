@@ -4,7 +4,6 @@ function receiveMessage(e) {
   // 來源網址（e.origin）不是指定的網域時
   if(e.origin !== 'https://auguston.github.io') {
     alert('資料來源錯誤');
-    console.log(e.origin)
     return false;
   }
   // 來源網址是指定的網域時
