@@ -2,7 +2,7 @@
 // 接到 message 要做什麼事的 function
 function receiveMessage(e) {
   // 來源網址（e.origin）不是指定的網域時
-  if(e.origin !== 'https://auguston.github.io/') {
+  if(e.origin !== 'https://auguston.github.io') {
     alert('資料來源錯誤');
     console.log(e.origin)
     return false;
@@ -24,11 +24,11 @@ window.addEventListener('message', receiveMessage, false);
 // 抓到iframe的視窗
 const iframe = document.getElementById('iframe2').contentWindow;
 document.getElementById('blue').addEventListener('click', () => {
-  iframe.postMessage('lightskyblue', 'https://auguston.github.io/');
+  iframe.postMessage('lightskyblue', 'https://auguston.github.io');
 });
 document.getElementById('gold').addEventListener('click', () => {
-  iframe.postMessage('gold', 'https://auguston.github.io/');
+  iframe.postMessage('gold', 'https://auguston.github.io');
 });
 document.getElementById('green').addEventListener('click', () => {
-  iframe.postMessage('lightgreen', 'https://auguston.github.io/');
+  iframe.postMessage('lightgreen', 'https://auguston.github.io');
 });

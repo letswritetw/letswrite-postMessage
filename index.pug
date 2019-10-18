@@ -1,6 +1,6 @@
 - var link = 'letswrite-postmessage'
 - var title = 'postMessage 主頁、iframe頁可互相傳值'
-- var description = '文章大綱'
+- var description = '本篇大綱：前端的一個困擾 管不到 iframe。Google、Facebook也是這樣傳值的。postMessage基本使用、傳值、接值。原始碼、Demo。本篇筆記要記錄的就是A、B頁面iframe的情況下，A傳給B，或B傳給A的問題，該怎麼用postMessage來解決。'
 
 <!DOCTYPE html>
 html(lang="zh-TW")
@@ -109,6 +109,8 @@ html(lang="zh-TW")
         
         .twelve.columns
           h5 呈現結果：iframe的高度就是iframe頁面本身的高度，無縫iframe
+          h6 Demo頁面來源：
+            a(href="https://cruip.com/", target="_blank") https://cruip.com/
           iframe#iframe(src="iframe/index.html", frameborder="0")
       
       hr
