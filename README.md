@@ -2,4 +2,4 @@
 
 Demo：[demo](https://letswritetw.github.io/letswrite-postMessage/)
 
-筆記文：[Let's Write](https://letswrite.tw/postmessage/)
+筆記文：[Let's Write](https://www.letswrite.tw/postmessage/)
